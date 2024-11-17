@@ -28,6 +28,7 @@ jobs:
         run: |
           mkdir -p output
           find diagrams -name '*.puml' -exec plantuml -tpng {} -o output/ \;
+          ls output
 
       - name: Upload to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
