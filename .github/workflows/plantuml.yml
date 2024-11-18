@@ -26,11 +26,7 @@ jobs:
 
       - name: Generate Diagrams
         run: |
-          mkdir -p output
-          pwd
-          ls diagrams -l
           find diagrams -name '*.puml' -exec plantuml -tpng {} -o output/ \;
-          ls output -l
           ls diagrams/output -l
 
       - name: Upload to GitHub Pages
