@@ -5,6 +5,9 @@ on:
     branches:
       - main # Adjust this to your default branch
 
+permissions:
+  contents: write # Give write access to the contents scope
+
 jobs:
   generate-diagrams:
     runs-on: ubuntu-latest
