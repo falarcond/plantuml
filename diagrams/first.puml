@@ -1,5 +1,8 @@
+@startuml
+
 @startmindmap
 !theme amiga
+
 * Debian
 ** Ubuntu
 *** Linux Mint
@@ -13,3 +16,5 @@
 *** <s>Raspmbc</s> => OSMC
 *** <s>Raspyfi</s> => Volumio
 @endmindmap
+
+@enduml
