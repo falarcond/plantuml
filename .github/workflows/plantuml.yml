@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate Diagrams
         run: |
-          find diagrams -name '*.puml' -exec plantuml -tpng {} -o output/ \;
+          find diagrams -name '*.puml' -exec plantuml -tsvg {} -o output/ \;
           ls diagrams/output -l
 
       - name: Upload to GitHub Pages
