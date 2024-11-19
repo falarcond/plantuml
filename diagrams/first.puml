@@ -1,4 +1,4 @@
 @startuml
 Bob -> Alice : hello
-Test -> Test2 : helloAlarcon
+Test -> Test2 : helloLucia
 @enduml
