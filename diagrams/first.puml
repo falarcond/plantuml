@@ -1,7 +1,6 @@
 @startuml
 
 @startmindmap
-!theme plain
 
 * Debian
 ** Ubuntu
