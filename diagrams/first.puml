@@ -1,19 +1,47 @@
 @startuml
+skinparam linetype ortho
 
-@startmindmap
+actor Client
+participant "Auth Server" as AuthServer
+participant "Resource Server" as ResourceServer
+participant "JWT Library" as JWTLibrary
 
-* Debian
-** Ubuntu
-*** Linux Mint
-*** Kubuntu
-*** Lubuntu
-*** KDE Neon
-** LMDE
-** SolydXK
-** SteamOS
-** Raspbian with a very long name
-*** <s>Raspmbc</s> => OSMC
-*** <s>Raspyfi</s> => Volumio
-@endmindmap
+Client -> AuthServer: POST /authenticate\n(credentials)
+AuthServer -> AuthServer: Validate credentials
+AuthServer -> JWTLibrary: Generate JWT\n(header, payload, secret)
+JWTLibrary -> AuthServer: JWT token
+AuthServer -> Client: Response with JWT
+
+== Token Validation on API Request ==
+
+Client -> ResourceServer: GET /protected-resource\nAuthorization: Bearer <JWT>
+ResourceServer -> JWTLibrary: Decode JWT
+JWTLibrary -> JWTLibrary: Verify signature\n(using secret/public key)
+alt Signature valid
+    JWTLibrary -> ResourceServer: Valid JWT payload
+    ResourceServer -> ResourceServer: Validate claims\n(exp, iss, aud)
+    alt Claims valid
+        ResourceServer -> Client: Response with resource
+    else Claims invalid
+        ResourceServer -> Client: 401 Unauthorized\nInvalid claims
+    end
+else Signature invalid
+    JWTLibrary -> ResourceServer: Invalid JWT
+    ResourceServer -> Client: 401 Unauthorized\nInvalid token
+end
+
+== Token Revocation Check (Optional) ==
+ResourceServer -> AuthServer: Check token blacklist (if implemented)
+alt Token revoked
+    AuthServer -> ResourceServer: Token is revoked
+    ResourceServer -> Client: 401 Unauthorized\nRevoked token
+else Token active
+    AuthServer -> ResourceServer: Token is valid
+    ResourceServer -> Client: Response with resource
+end
+
+== Public Key Rotation (Optional) ==
+ResourceServer -> AuthServer: Fetch latest public key
+AuthServer -> ResourceServer: Updated public key
 
 @enduml
